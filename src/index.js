@@ -5,43 +5,64 @@ const onClickAdd = () => {
   const inputText = document.getElementById("add-text").value;
   document.getElementById("add-text").value = "";
 
-  // liタグ作成
-  const li = document.createElement("li");
-
   // divタグ作成
   const div = document.createElement("div");
   div.className = "list-row";
 
-  // pタグ作成
-  const p = document.createElement("p");
-  p.innerText = inputText;
+  // liタグ作成
+  const li = document.createElement("li");
+  li.innerText = inputText;
 
   // 完了ボタン作成
   const completeButton = document.createElement("button");
   completeButton.innerText = "完了";
   completeButton.addEventListener("click", () => {
-    alert("完了");
+    // リストから削除
+    deleteFromIncompleteList(completeButton.parentNode);
+
+    //完了リストに追加する
+    const addTarget = completeButton.parentNode;
+
+    // todo内容の取得
+    const text = addTarget.firstElementChild.innerText;
+
+    // 完了リストに追加するために初期化
+    addTarget.textContent = null;
+
+    // liタグ作成
+    const li = document.createElement("li");
+    li.innerText = text;
+
+    // 完了button作成
+    const backButton = document.createElement("button");
+    backButton.innerText = "戻す";
+
+    // 親要素に子要素追加
+    addTarget.appendChild(li);
+    addTarget.appendChild(backButton);
+
+    // 完了リストに追加
+    document.getElementById("complete-list").appendChild(addTarget);
   });
   // 削除ボタン作成
   const deleteButton = document.createElement("button");
   deleteButton.innerText = "削除";
   deleteButton.addEventListener("click", () => {
-    // 削除する部分の親要素を取得
-    const deleteTarget = div.parentNode;
-    // 親要素から削除
-    document.getElementById("incomplete-list").removeChild(deleteTarget);
+    deleteFromIncompleteList(deleteButton.parentNode);
   });
 
-  // liタグの下にdivタグを配置
-  li.appendChild(div);
-
-  // divタグの下にpタグを配置
-  div.appendChild(p);
+  // divタグの下にliタグを配置
+  div.appendChild(li);
   div.appendChild(completeButton);
   div.appendChild(deleteButton);
 
   // 未完了リストを配置
-  document.getElementById("incomplete-list").appendChild(li);
+  document.getElementById("incomplete-list").appendChild(div);
+
+  // targetの親要素を削除
+  const deleteFromIncompleteList = (target) => {
+    document.getElementById("incomplete-list").removeChild(target);
+  };
 };
 
 document
