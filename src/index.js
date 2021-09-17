@@ -5,13 +5,22 @@ const onClickAdd = () => {
   const inputText = document.getElementById("add-text").value;
   document.getElementById("add-text").value = "";
 
+  createIncompleteList(inputText);
+};
+
+// targetの親要素を削除
+const deleteFromIncompleteList = (target) => {
+  document.getElementById("incomplete-list").removeChild(target);
+};
+
+const createIncompleteList = (text) => {
   // divタグ作成
   const div = document.createElement("div");
   div.className = "list-row";
 
   // liタグ作成
   const li = document.createElement("li");
-  li.innerText = inputText;
+  li.innerText = text;
 
   // 完了ボタン作成
   const completeButton = document.createElement("button");
@@ -36,6 +45,15 @@ const onClickAdd = () => {
     // 完了button作成
     const backButton = document.createElement("button");
     backButton.innerText = "戻す";
+    backButton.addEventListener("click", () => {
+      // 完了リストから削除
+      const deleteTaget = backButton.parentNode;
+      document.getElementById("complete-list").removeChild(deleteTaget);
+
+      // テキスト取得
+      const text = backButton.parentNode.firstElementChild.innerText;
+      createIncompleteList(text);
+    });
 
     // 親要素に子要素追加
     addTarget.appendChild(li);
@@ -58,11 +76,6 @@ const onClickAdd = () => {
 
   // 未完了リストを配置
   document.getElementById("incomplete-list").appendChild(div);
-
-  // targetの親要素を削除
-  const deleteFromIncompleteList = (target) => {
-    document.getElementById("incomplete-list").removeChild(target);
-  };
 };
 
 document
